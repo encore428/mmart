@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+## Fundamentals in Frontend Development
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## END OF MODULE PROJECT (CAPSTONE PROJECT)
 
-## Available Scripts
+<table>
+    <thead> <tr><th>Project Title / Description</th>    <th>Implement a React SPA</th></tr> </thead>
+    <tbody>
+        <tr>
+            <td>Project Objective(s)</td>
+            <td>
+                <p>Create a React single-page application (SPA) that has at least a listing page and a details page 
+				   showing data from API.</p>
+                <p>The application should allow users to bookmark items (like a favourite button) and show the 
+				   bookmarked items in the home page. The bookmark data can be saved in localStorage.</p>
+                <p>While creating the application, you should develop the style guide for your application using 
+				   React Styleguidist.</p>
+                <p>You’re free to use any styling technology (plain CSS, TailwindCSS, Bootstrap) etc, but your 
+				   application must be styled.</p>
+                <p>You’re NOT allowed to use third-party component libraries (like Material UI or React Bootstrap)
+				   but you’re free to refer to them for inspiration.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>Project Duration</td>
+            <td>121 hours</td>
+        </tr>
+    </tbody>
+</table>
 
-In the project directory, you can run:
 
-### `yarn start`
+Create a new Single Page Application using Create React App with the following pages:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Home page at path `/`, displays pages of personal artwork collection.  Artwork can be individually discarded.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. Specify filtering criteria on Specificaitons page at path `/spec`.  The specification is used to compose API to 
+   retrieve artwork from [Metropolitan Museum of Art](https://metmuseum.github.io/).
 
-### `yarn test`
+3. Browse filtered collection of artworks in pages at path `/browse`.  Artwork can be selectively added to personal collection.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+4. View more details of selected artwork at path `/art/<objectID>`.
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Deployment
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The app has been deployed to Netlify as below:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+https://https://confident-thompson-470905.netlify.app/
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+During the deployment, there were two additional tasks required just because of Netlify:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. CI=False, refer to [shoppingcart](https://github.com/encore428/shoppingcart).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+1. Create file `_redirects` in `/public` folder (next to index.html), with this line `/* /index.html 200`.  Refer to 
+this [article](https://ridbay.medium.com/react-routing-and-netlify-redirects-fd1f00eeee95).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+# Testing
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
