@@ -44,7 +44,7 @@ Create a new Single Page Application using Create React App with the following p
 
 The app has been deployed to Netlify as below:
 
-https://https://confident-thompson-470905.netlify.app/
+https://confident-thompson-470905.netlify.app/
 
 
 During the deployment, there were two additional tasks required just because of Netlify:
