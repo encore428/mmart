@@ -1,17 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Route } from "react-router-dom";
+import { AppShell } from "./app-shell";
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import BrowsePage from './Browse-page';
+import SpecForm from './Spec-form';
+import HomePage from './Home-page';
+import ObjectPage from './Object-page';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <BrowserRouter>
+      <AppShell>
+        <Route path="/browse">
+          <BrowsePage />
+        </Route>
+        <Route path="/spec">
+          <SpecForm />
+        </Route>
+        <Route path="/art/:objectId">
+          <ObjectPage />
+        </Route>
+        <Route exact path="/">
+          <HomePage />
+        </Route>
+      </AppShell>
+  </BrowserRouter>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
