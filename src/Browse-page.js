@@ -18,7 +18,8 @@ export const BrowsePage = () => {
   }
 
   React.useEffect(() => {
-      getObjects(storedMySpecStr).then((res) => {setObjCnt(res.total);;setMyBrows(res.objectIDs);});
+    setIsLoading(true);
+      getObjects(storedMySpecStr).then((res) => {setObjCnt(res.total);setMyBrows(res.objectIDs);});
   }, []);
 
   
@@ -33,22 +34,27 @@ export const BrowsePage = () => {
   }
 
   React.useEffect(() => {
-    setPageBrows(myBrows.slice((pageNum-1) * PAGESIZE, (pageNum) * PAGESIZE));
     setIsLoading(false);
+  }, [pageBrows]);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    setPageBrows(myBrows.slice((pageNum-1) * PAGESIZE, (pageNum) * PAGESIZE));
   }, [myBrows, pageNum]);
 
   React.useEffect(() => {
+    setIsLoading(true);
     setPageNum(Math.min(pageNum,pageCnt));
   }, [pageCnt]);
 
   React.useEffect(() => {
+    setIsLoading(true);
     setPageCnt(Math.max(1,Math.floor((myBrows.length+PAGESIZE-1) / PAGESIZE)));
   }, [myBrows]);
 
   React.useEffect(() => {
     localStorage.setItem(STORAGE_MY_COLL, myColl.join(','));
   }, [myColl]);
-
 
   const pickObj = (objid) => {
       setIsLoading(true);
