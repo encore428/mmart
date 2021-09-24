@@ -1,9 +1,13 @@
 import * as React from "react"
 import { useHistory } from "react-router-dom"
 
-import { BASE_URL, STORAGE_MY_SPEC } from "./const";
+import { BASE_URL } from "./const";
 
-export const SpecForm = () => {
+export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr, 
+                           storedDept, setStoredDept,
+                           storedKeyw, setStoredKeyw,
+                           storedHlgt, setStoredHlgt,
+                           storedAtst, setStoredAtst }) => {
   const history = useHistory();
   
   const getDepts = () => {
@@ -16,28 +20,28 @@ export const SpecForm = () => {
 
   const [depts, setDepts] = React.useState([]);
 
-  const [department, setDepartment] = React.useState(0);
-  const [highlight, setHighlight] = React.useState(false);
-  const [keyword, setKeyword] = React.useState("");
-  const [artist, setArtist] = React.useState(false);
-
   const queryAPI = () => {
-    let result = "";
-    if (department!==0) {
-        result = result + "departmentIds=" + department + "&";
+    let result1 = ""; let result2 = "";
+    if (storedDept!==0) {
+        result1 = result1 + "departmentIds=" + storedDept + "&";
+        result2 = result2 + depts.filter(dept => dept.departmentId===storedDept)[0].displayName + " department, ";
     }
-    console.log(highlight);
-    if (highlight) {
-      result = result + "isHighlight=true&";
+    if (storedHlgt) {
+      result1 = result1 + "isHighlight=true&";
+      result2 = result2 + "only high-lighted, ";
     }
-    if (artist && keyword!=="") {
-      result = result + "artistOrCulture=true&";
+    if (storedAtst && storedKeyw!=="") {
+      result1 = result1 + "artistOrCulture=true&";
+      result2 = result2 + "artist or Culture with ";
     }
-    if (keyword!=="") {
-      result = result + "q=" + keyword + "&";
+    if (storedKeyw!=="") {
+      result1 = result1 + "q=" + storedKeyw + "&";
+      result2 = result2 + `keyword '${storedKeyw}', `;
     }
-    if (result !== "") {result = result.slice(0,-1);}
-    return "hasImages=true&"+result;
+    if (result1 !== "") {
+      result1 = result1.slice(0,-1);
+    }
+    return ["hasImages=true&"+result1, result2+" only those with pictures"];
   }
 
 
@@ -47,8 +51,9 @@ export const SpecForm = () => {
           <form id="spec-form" className="flex flex-col h-full" 
                     onSubmit={
                         (ev) => {
-                          ev.preventDefault(); let myStr=queryAPI(); 
-                          localStorage.setItem(STORAGE_MY_SPEC, myStr);
+                          ev.preventDefault(); let mySpec=""; let myDesc = ""; [mySpec, myDesc] =queryAPI(); 
+                          setStoredMySpecStr(mySpec);
+                          setStoredMyDescStr(myDesc);
                           history.push('/browse');
                         }
                     }>
@@ -67,10 +72,10 @@ export const SpecForm = () => {
                   Department
                 </label>
                 {depts && (
-                <select id="department" className="inline-flex items-center" value={department} onChange={(ev) => {setDepartment(Number(ev.target.value))}} >
+                <select id="department" className="inline-flex items-center" value={storedDept} onChange={(ev) => {setStoredDept(Number(ev.target.value))}} >
                   <option value={0}>All</option>
                   {depts.map((dept) =>
-                    <option value={dept.departmentId}>{dept.displayName}</option>
+                    <option key={dept.departmentId} value={dept.departmentId}>{dept.displayName}</option>
                   )}
                 </select>
                 )}
@@ -83,7 +88,7 @@ export const SpecForm = () => {
                   Only Highlights
                 </label>
                 <input type="checkbox" id="highlight" className="form-checkbox" 
-                    value={highlight} onChange={(ev) => {setHighlight(!highlight)}}/>
+                    checked={storedHlgt} onChange={(ev) => {setStoredHlgt(!storedHlgt)}}/>
               </div>
             </div>
 
@@ -92,7 +97,7 @@ export const SpecForm = () => {
                 <label htmlFor="keyword" className="block text-sm font-medium text-gray-900">
                   Keyword
                 </label>
-                <input type="text" id="keyword" required className="
+                <input type="text" id="keyword" className="
                     block
                     w-full
                     shadow-sm
@@ -101,8 +106,8 @@ export const SpecForm = () => {
                     border-gray-300
                     rounded-md
                   "
-                  value={keyword}
-                  onChange={(ev) => {setKeyword(ev.target.value)}} />
+                  value={storedKeyw}
+                  onChange={(ev) => {setStoredKeyw(ev.target.value);}} />
               </div>
             </div>
 
@@ -112,7 +117,7 @@ export const SpecForm = () => {
                   Find keyword in artist/culture
                 </label>
                 <input type="checkbox" id="artist" className="form-checkbox" 
-                    value={artist} onChange={(ev) => {setArtist(!artist)}}/>
+                    checked={storedAtst} onChange={(ev) => {setStoredAtst(!storedAtst)}}/>
               </div>
             </div>
 

@@ -1,12 +1,12 @@
 import * as React from "react";
 import { useParams } from "react-router-dom";
 
-import { BASE_URL, STORAGE_OBJ_ID } from "./const";
+import { BASE_URL } from "./const";
 
 export const ObjectPage = () => {
   const params = useParams();
   const objectId = params.objectId;
-
+ 
   const [data, setData] = React.useState(null);
 
   const getObject = (objid) => {
@@ -21,7 +21,7 @@ export const ObjectPage = () => {
     <> Displaying {objectId}
       {data ? 
       <>
-         <img src={data.primaryImage} alt="art small" />
+         <img src={data.primaryImage} alt="primary" />
          <p>Title: {data.title}</p>
          <p>Artist: {data.artistDisplayName}, {data.artistDisplayBio}</p>
          </>

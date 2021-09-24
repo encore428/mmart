@@ -1,37 +1,43 @@
 import React from 'react';
 
-import { PAGESIZE } from "./const"
+import { PAGESIZE } from "./const";
+
 import { CollItem } from "./components/coll-item"
 
-export const HomePage = ({myColl, setMyColl, pageNum, setPageNum, pageCnt, setPageCnt}) => {
+export const BrowPage = ( {storedMyDescStr, myBrows, pageCnt , myColl, setMyColl, pageNum, setPageNum } ) => {
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [goPage, setGoPage] = React.useState(pageNum);
-
 
   React.useEffect(() => {
     setGoPage(pageNum);
   }, [pageNum]);
 
   const pageMvnt = (pmvt, num) => {
-      if (pmvt==='G') {
+      if (pmvt==='R') {
+        // The formula ensures random movement to any one of the other pages except itself.
+        setPageNum(((pageNum + Math.floor(Math.random()*(pageCnt-1)))% pageCnt)+1);
+      } else if (pmvt==='G') {
         setPageNum(num);
       } else {
         setPageNum(pageNum + num);
       }
   }
 
-  const deleObj = (objid) => {
+  const pickObj = (objid) => {
       setIsLoading(true);
-      if (window.confirm(`Proceed to delete object ${objid} from collection ?`)) {
-          setMyColl(myColl.filter(obj => obj!==objid));
-        }
+      setMyColl(myColl.concat(Number(objid)));
       setIsLoading(false);
   }
 
+  const deleObj = (objid) => {
+      setIsLoading(true);
+      setMyColl(myColl.filter(obj => obj!==Number(objid)));
+      setIsLoading(false);
+}
+
   return (
     <div>
-        <h2>Your collection {myColl.length===0?'is empty':(`has ${myColl.length} item`)}{myColl.length>1?'s':''}</h2>
         <div id="pagination-btns" className="flex justify-between items-center">
             <button id="prev-btn" type="button"
                 disabled={isLoading || pageNum<=1} 
@@ -92,6 +98,21 @@ export const HomePage = ({myColl, setMyColl, pageNum, setPageNum, pageCnt, setPa
                     ">
                 {isLoading?'Loading...':(`Page ${pageNum} of ${pageCnt}`)}
             </button>
+            <button id="rand-btn" type="button" 
+                disabled={isLoading || pageCnt===1} 
+                onClick={() => {pageMvnt('R');}}
+                className="
+                inline-flex justify-center
+                    px-4 py-2
+                    border border-transparent
+                    shadow-sm rounded-md
+                    text-xs font-medium text-white
+                    bg-pink-600
+                    hover:bg-pink-700
+                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500
+                    ">
+                {isLoading?"Loading...":"Random"}
+            </button>
             <button id="next-btn" type="button" 
                 disabled={isLoading || pageNum>=pageCnt} 
                 onClick={() => {pageMvnt('P', 1);}}
@@ -110,18 +131,27 @@ export const HomePage = ({myColl, setMyColl, pageNum, setPageNum, pageCnt, setPa
         </div>
 
         <div className="max-w-xm flex py-6 space-y-1">
-          {(myColl.slice((pageNum-1) * PAGESIZE, (pageNum) * PAGESIZE).length > 0) && myColl.slice((pageNum-1) * PAGESIZE, (pageNum) * PAGESIZE).map((object => (
-              <CollItem
-                objId={object}
-                key={object}
-                goDele={() => deleObj(object)}
-              />
+          {myBrows && (myBrows.slice((pageNum-1) * PAGESIZE, (pageNum) * PAGESIZE).length > 0) && myBrows.slice((pageNum-1) * PAGESIZE, (pageNum) * PAGESIZE).map((object => (
+              (myColl.indexOf(Number(object))<0)?(
+                <CollItem
+                  objId={object}
+                  key={object}
+                  goPick={() => pickObj(object)}
+                />
+              ):(
+                <CollItem
+                  objId={object}
+                  key={object}
+                  goDele={() => deleObj(object)}
+                />
+              )
             ))
           )}
         </div>
+        <h2>The specification [{storedMyDescStr}] turns out {!myBrows || myBrows.length===0?'empty':(`${myBrows.length} item`)}{myBrows.length>1?'s':''}</h2>
     </div>
   );
 };
 
  
-export default HomePage;
+export default BrowPage;
