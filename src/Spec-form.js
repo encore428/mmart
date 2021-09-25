@@ -40,8 +40,9 @@ export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr,
     }
     if (result1 !== "") {
       result1 = result1.slice(0,-1);
+      result2 = result2.slice(0,-2);
     }
-    return ["hasImages=true&"+result1, result2+" only those with pictures"];
+    return ["hasImages=true&"+result1, result2];
   }
 
 

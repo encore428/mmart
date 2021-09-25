@@ -7,24 +7,48 @@ import './index.css';
 import BrowPage from './Brow-page';
 import SpecForm from './Spec-form';
 import HomePage from './Home-page';
-import ObjectPage from './Object-page';
+import ObjtPage from './Objt-page';
 
 import * as Const from "./const";
 
+
+const usePersistedState = (storageKey, defaultValue, suggestedValue) => {
+  const [value, setValue] = React.useState(
+    () => {
+      const myStr = localStorage.getItem(storageKey);
+      console.log(`**** localstorage ${storageKey} initial load [${myStr}]`);
+      console.log(`localStorage.setItem("${storageKey}", "${suggestedValue||"your value"}") to set`);
+      console.log(`localStorage.removeItem("${storageKey}") to reset`);
+      if (typeof defaultValue === "string") {return myStr===null?defaultValue:myStr;}
+      if (typeof defaultValue === "number") {return Number(myStr)===null?defaultValue:Number(myStr);}
+      if (typeof defaultValue === "boolean") {return myStr===null?defaultValue:myStr==="1";}
+      if (typeof defaultValue === "object" && Array.isArray(defaultValue)) {return myStr===null||myStr===""?[]:myStr.split(',').map(function(e){return Number(e)});}
+    }
+  );
+
+  React.useEffect(() => {
+    let myStr = value;
+    if (typeof value === "number") {myStr = String(value);}
+    if (typeof value === "boolean") {myStr = value?"1":"0";}
+    if (typeof value === "object" && Array.isArray(value)) {myStr = value.join(',');}
+    localStorage.setItem(storageKey, myStr);
+    console.log(`**** localstorage ${storageKey} updated to ${value}`)
+  }, [value, storageKey]);
+
+  return [value, setValue];
+};
+
+
+
 export const Index = () => {
 
-  const [storedMySpecStr, setStoredMySpecStr] = React.useState((localStorage.getItem(Const.STORAGE_MY_SPEC)===null)?"":localStorage.getItem(Const.STORAGE_MY_SPEC));
-  const [storedMyDescStr, setStoredMyDescStr] = React.useState((localStorage.getItem(Const.STORAGE_MY_DESC)===null)?"":localStorage.getItem(Const.STORAGE_MY_DESC));
-  //localStorage.removeItem(STORAGE_MY_COLL);
-  //const storedMyCollStr = (localStorage.getItem(STORAGE_MY_COLL)===null)?"186318,335370,437184,830094,761604,437329,436121,436535":localStorage.getItem(STORAGE_MY_COLL);
-  const storedMyCollStr = (localStorage.getItem(Const.STORAGE_MY_COLL)===null)?"":localStorage.getItem(Const.STORAGE_MY_COLL);
-  //console.log(`storedMySpecStr loaded [${storedMySpecStr}]`);
-  //console.log(`storedMyDescStr loaded [${storedMyDescStr}]`);
-  //console.log(`storedMyCollStr loaded [${storedMyCollStr}]`);
+  const [storedMySpecStr, setStoredMySpecStr] = usePersistedState(Const.STORAGE_MY_SPEC, "");
+  const [storedMyDescStr, setStoredMyDescStr] = usePersistedState(Const.STORAGE_MY_DESC, "");
+
 
   ////////////////////////////////////
   // states for my collections page
-  const [myColl, setMyColl] = React.useState(storedMyCollStr===""?[]:storedMyCollStr.split(',').map(function(e){return Number(e)}));
+  const [myColl, setMyColl] = usePersistedState(Const.STORAGE_MY_COLL, [], "186318,335370,437184,830094,761604,437329,436121,436535");
   
   const [clPageNum, setClPageNum] = React.useState(1);
   const [clPageCnt, setClPageCnt] = React.useState(1);
@@ -36,33 +60,15 @@ export const Index = () => {
 
   React.useEffect(() => {
     setClPageCnt(Math.max(1,Math.floor((myColl.length+Const.PAGESIZE-1) / Const.PAGESIZE)));
-    localStorage.setItem(Const.STORAGE_MY_COLL, myColl.join(','));
-    console.log(`saving coll string ${myColl.join(',')}`)
   }, [myColl]);
 
 
   ////////////////////////////////////
   // states for Specifications page
-  const [storedDept, setStoredDept] = React.useState((localStorage.getItem(Const.STORAGE_MY_DEPT)===null)?0:Number(localStorage.getItem(Const.STORAGE_MY_DEPT)));
-  const [storedKeyw, setStoredKeyw] = React.useState((localStorage.getItem(Const.STORAGE_MY_KEYW)===null)?"":localStorage.getItem(Const.STORAGE_MY_KEYW));
-  const [storedHlgt, setStoredHlgt] = React.useState((localStorage.getItem(Const.STORAGE_MY_HLGT)===null)?false:localStorage.getItem(Const.STORAGE_MY_HLGT)==="1");
-  const [storedAtst, setStoredAtst] = React.useState((localStorage.getItem(Const.STORAGE_MY_ATST)===null)?false:localStorage.getItem(Const.STORAGE_MY_ATST)==="1");
-  
-  React.useEffect(() => {
-    localStorage.setItem(Const.STORAGE_MY_DEPT, storedDept);
-  }, [storedDept]);
-
-  React.useEffect(() => {
-    localStorage.setItem(Const.STORAGE_MY_KEYW, storedKeyw);
-  }, [storedKeyw]);
-
-  React.useEffect(() => {
-    localStorage.setItem(Const.STORAGE_MY_HLGT, storedHlgt?"1":"0");
-  }, [storedHlgt]);
-
-  React.useEffect(() => {
-    localStorage.setItem(Const.STORAGE_MY_ATST, storedAtst?"1":"0");
-  }, [storedAtst]);
+  const [storedDept, setStoredDept] = usePersistedState(Const.STORAGE_MY_DEPT, 0, "0");
+  const [storedKeyw, setStoredKeyw] = usePersistedState(Const.STORAGE_MY_KEYW, "");
+  const [storedHlgt, setStoredHlgt] = usePersistedState(Const.STORAGE_MY_HLGT, false, "1");
+  const [storedAtst, setStoredAtst] = usePersistedState(Const.STORAGE_MY_ATST, false, "1");
 
 
   ////////////////////////////////////
@@ -91,16 +97,14 @@ export const Index = () => {
   React.useEffect(() => {
     // setIsLoading(true);
     getObjects(storedMySpecStr)
-      .then((res) => {  if (res.objectIDs===undefined) {
+      .then((res) => {  if (res.objectIDs===undefined || res.objectIDs===null) {
                             setMyBrows([]);
                         } else {
                             setMyBrows(res.objectIDs);
                         }
                         setBrPageNum(1);
                       });
-    localStorage.setItem(Const.STORAGE_MY_SPEC, storedMySpecStr);
-    localStorage.setItem(Const.STORAGE_MY_DESC, storedMyDescStr);
-  }, [storedMySpecStr, storedMyDescStr]);
+  }, [storedMySpecStr]);
 
 
   return (
@@ -121,7 +125,7 @@ export const Index = () => {
           />
         </Route>
         <Route path="/art/:objectId">
-          <ObjectPage />
+          <ObjtPage />
         </Route>
         <Route exact path="/">
           <HomePage myColl={myColl} setMyColl={setMyColl} 

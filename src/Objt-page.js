@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { BASE_URL } from "./const";
 
-export const ObjectPage = () => {
+export const ObjtPage = () => {
   const params = useParams();
   const objectId = params.objectId;
  
@@ -33,4 +33,4 @@ export const ObjectPage = () => {
  
 }
  
-export default ObjectPage;
+export default ObjtPage;
