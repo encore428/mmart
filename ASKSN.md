@@ -2,11 +2,11 @@
 ## Questions
 
 # index.js:1 Warning: Cannot update a component (`AppShell`) while rendering a different component (`HomePage`).
-I was experimenting with useContext to have some states in app-shell.js so that I can high-light the active 
-navigation item on the nav bar as as the picture below where Specification is high-lighted:
+I was experimenting with useContext to have a state in app-shell.js so that I can high-light the active 
+navigation item on the nav bar, such as the picture below, where Specification is high-lighted as the current page:
 ![screenshot](./app.png)
 
-I referenced this article: https://dmitripavlutin.com/react-context-and-usecontext/ 
+I referenced this article: https://dmitripavlutin.com/react-context-and-usecontext/ to implment useContext.
 
 1. I have `navContext.js` created to supply a value to indicate the current active page;
 ```js
