@@ -72,5 +72,6 @@ export default BrowPage;
 
 4. The change seems to work, but I have been getting this **Cannot update a component (`AppShell`) while rendering a different component (`HomePage`)** error since then.
 
-Could this have anything to do with my deployment of useContext?  The syntax looks odd and clumpsy to me, especially `<NavContext.Provider value = {value}>`
-How to I add more variables to useContext?
+- Could this have anything to do with my deployment of useContext?  
+- The syntax looks odd and clumpsy to me, especially `<NavContext.Provider value = {value}>`
+- How to I add more variables to useContext?
