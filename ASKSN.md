@@ -2,7 +2,7 @@
 ## Questions
 
 # index.js:1 Warning: Cannot update a component (`AppShell`) while rendering a different component (`HomePage`).
-I was experimenting with useContext to have a state in app-shell.js so that I can high-light the active 
+I was experimenting using useContext to have a state in `app-shell.js` so that I can high-light the active 
 navigation item on the nav bar, such as the picture below, where Specification is high-lighted as the current page:
 ![screenshot](./app.png)
 
@@ -20,7 +20,7 @@ const NavContext = createContext({
 export default NavContext;
 ```
 
-2. In `app-shell.js`, I pull out navCurr so that I know which of the <Link to/> item I should high-light as actve:
+2. In `app-shell.js`, I pull out `navCurr` so that I know which of the <Link to/> item I should high-light as actve:
 
 ```
 ...
@@ -49,9 +49,9 @@ export const AppShell = ({ children }) => {
   );
 };
 ```
-3. In each of the pages related to <Link to/>:
+3. In each of the pages related to `<Link to/>`:
 ```
-import { useContext, useEffect, useState } from 'react'
+...
 import NavContext from './navContext';
 ...
 export const BrowPage = ( {storedMyDescStr, myBrows, pageCnt , myColl, setMyColl, pageNum, setPageNum } ) => {
@@ -72,5 +72,5 @@ export default BrowPage;
 
 4. The change seems to work, but I have been getting this **Cannot update a component (`AppShell`) while rendering a different component (`HomePage`)** error since then.
 
-Could this have anythin to do with my deployment of useContext?  The syntax looks odd to me, especially `<NavContext.Provider value = {value}>`
+Could this have anything to do with my deployment of useContext?  The syntax looks odd and clumpsy to me, especially `<NavContext.Provider value = {value}>`
 How to I add more variables to useContext?
