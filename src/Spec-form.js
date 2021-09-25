@@ -1,24 +1,28 @@
-import * as React from "react"
+import { useContext, useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom"
 
 import { BASE_URL } from "./const";
+import NavContext from './navContext';
 
 export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr, 
                            storedDept, setStoredDept,
                            storedKeyw, setStoredKeyw,
                            storedHlgt, setStoredHlgt,
                            storedAtst, setStoredAtst }) => {
+
+  const { navCurr, setNavCurr } = useContext(NavContext);
+
   const history = useHistory();
   
   const getDepts = () => {
     return fetch(`${BASE_URL}departments`).then((res) => res.json());
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
       getDepts().then((res) => {setDepts(res.departments);});
   }, []);
 
-  const [depts, setDepts] = React.useState([]);
+  const [depts, setDepts] = useState([]);
 
   const queryAPI = () => {
     let result1 = ""; let result2 = "";
@@ -45,7 +49,7 @@ export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr,
     return ["hasImages=true&"+result1, result2];
   }
 
-
+  setNavCurr("/spec");
   return (
       <div>
         <div className="flex-initial bg-white w-full lg:max-w-md border-b border-gray-100">

@@ -1,15 +1,18 @@
-import React from 'react';
+import { useContext, useEffect, useState } from 'react'
+
 
 import { PAGESIZE } from "./const";
-
 import { CollItem } from "./components/coll-item"
+import NavContext from './navContext';
 
 export const BrowPage = ( {storedMyDescStr, myBrows, pageCnt , myColl, setMyColl, pageNum, setPageNum } ) => {
 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [goPage, setGoPage] = React.useState(pageNum);
+  const { navCurr, setNavCurr } = useContext(NavContext);
 
-  React.useEffect(() => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [goPage, setGoPage] = useState(pageNum);
+
+  useEffect(() => {
     setGoPage(pageNum);
   }, [pageNum]);
 
@@ -35,6 +38,8 @@ export const BrowPage = ( {storedMyDescStr, myBrows, pageCnt , myColl, setMyColl
       setMyColl(myColl.filter(obj => obj!==Number(objid)));
       setIsLoading(false);
 }
+
+  setNavCurr("/browse");
 
   return (
     <div>

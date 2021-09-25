@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom';
 
 import { BrowserRouter, Route } from "react-router-dom";
@@ -13,7 +13,7 @@ import * as Const from "./const";
 
 
 const usePersistedState = (storageKey, defaultValue, suggestedValue) => {
-  const [value, setValue] = React.useState(
+  const [value, setValue] = useState(
     () => {
       const myStr = localStorage.getItem(storageKey);
       console.log(`**** localstorage ${storageKey} initial load [${myStr}]`);
@@ -26,7 +26,7 @@ const usePersistedState = (storageKey, defaultValue, suggestedValue) => {
     }
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     let myStr = value;
     if (typeof value === "number") {myStr = String(value);}
     if (typeof value === "boolean") {myStr = value?"1":"0";}
@@ -50,15 +50,15 @@ export const Index = () => {
   // states for my collections page
   const [myColl, setMyColl] = usePersistedState(Const.STORAGE_MY_COLL, [], "186318,335370,437184,830094,761604,437329,436121,436535");
   
-  const [clPageNum, setClPageNum] = React.useState(1);
-  const [clPageCnt, setClPageCnt] = React.useState(1);
+  const [clPageNum, setClPageNum] = useState(1);
+  const [clPageCnt, setClPageCnt] = useState(1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setClPageNum(Math.min(clPageNum,clPageCnt));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clPageCnt]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setClPageCnt(Math.max(1,Math.floor((myColl.length+Const.PAGESIZE-1) / Const.PAGESIZE)));
   }, [myColl]);
 
@@ -77,24 +77,24 @@ export const Index = () => {
     return fetch(`${Const.BASE_URL}search?${spec}`).then((res) => res.json()).catch((e) => e);
   }
 
-  //const [isLoading, setIsLoading] = React.useState(false);
-  const [brPageNum, setBrPageNum] = React.useState(1);
-  const [brPageCnt, setBrPageCnt] = React.useState(1);
-  const [myBrows, setMyBrows] = React.useState([]);
+  //const [isLoading, setIsLoading] = useState(false);
+  const [brPageNum, setBrPageNum] = useState(1);
+  const [brPageCnt, setBrPageCnt] = useState(1);
+  const [myBrows, setMyBrows] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     //setIsLoading(true);
     setBrPageNum(Math.min(brPageNum,brPageCnt));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brPageCnt]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     //setIsLoading(true);
     setBrPageCnt(Math.max(1,Math.floor((myBrows.length+Const.PAGESIZE-1) / Const.PAGESIZE)));
     //setIsLoading(false);
   }, [myBrows]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // setIsLoading(true);
     getObjects(storedMySpecStr)
       .then((res) => {  if (res.objectIDs===undefined || res.objectIDs===null) {
