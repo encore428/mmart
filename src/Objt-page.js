@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 
 import { BASE_URL } from "./const";
@@ -17,11 +17,14 @@ export const ObjtPage = () => {
   }
 
   useEffect(() => {
+    console.log('switch to /art');
+    setNavCurr("/art");
+  });
+
+  useEffect(() => {
       getObject(objectId).then((res) => setData(res));
   }, [objectId]);
   
-  setNavCurr("/art");
-
   return (
     <> Displaying {objectId}
       {data ? 

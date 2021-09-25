@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 
 import { BASE_URL } from "./const";
@@ -19,6 +19,8 @@ export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr,
   }
 
   useEffect(() => {
+      console.log('switch to /spec');
+      setNavCurr("/spec");
       getDepts().then((res) => {setDepts(res.departments);});
   }, []);
 
@@ -49,7 +51,6 @@ export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr,
     return ["hasImages=true&"+result1, result2];
   }
 
-  setNavCurr("/spec");
   return (
       <div>
         <div className="flex-initial bg-white w-full lg:max-w-md border-b border-gray-100">

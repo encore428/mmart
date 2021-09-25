@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from "react"
 
 import { PAGESIZE } from "./const"
 import { CollItem } from "./components/coll-item"
@@ -10,6 +10,11 @@ export const HomePage = ({myColl, setMyColl, pageNum, setPageNum, pageCnt, setPa
 
   const [isLoading, setIsLoading] = useState(false);
   const [goPage, setGoPage] = useState(pageNum);
+
+  useEffect(() => {
+    console.log('switch to /');
+    setNavCurr("/");
+  },[]);
 
   useEffect(() => {
     setGoPage(pageNum);
@@ -31,7 +36,6 @@ export const HomePage = ({myColl, setMyColl, pageNum, setPageNum, pageCnt, setPa
       setIsLoading(false);
   }
 
-  setNavCurr("/");
   return (
     <div>
         <h2>Your collection {myColl.length===0?'is empty':(`has ${myColl.length} item`)}{myColl.length>1?'s':''}</h2>

@@ -18,7 +18,7 @@ export const AppShell = ({ children }) => {
   return (
     <NavContext.Provider value = {value}>
       <div>
-        <h1>My Metropolitan Museum of Art Collection navCurr is {navCurr}</h1>
+        <h1>My Metropolitan Museum of Art Collection</h1>
           <ul className="header">
             <li><Link to="/" className={navCurr==="/"?"active":""} >My collection</Link></li>
             <li><Link to="/spec" className={navCurr==="/spec"?"active":""} >Specifications</Link></li>
