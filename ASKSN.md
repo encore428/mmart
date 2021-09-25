@@ -22,7 +22,7 @@ export default NavContext;
 
 2. In `app-shell.js`, I pull out `navCurr` so that I know which of the <Link to/> item I should high-light as actve:
 
-```
+```js
 ...
 import NavContext from './navContext';
 
@@ -50,7 +50,7 @@ export const AppShell = ({ children }) => {
 };
 ```
 3. In each of the pages related to `<Link to/>`:
-```
+```js
 ...
 import NavContext from './navContext';
 ...
