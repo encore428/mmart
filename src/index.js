@@ -11,7 +11,6 @@ import ObjtPage from './Objt-page';
 
 import * as Const from "./const";
 
-
 const usePersistedState = (storageKey, defaultValue, suggestedValue) => {
   const [value, setValue] = useState(
     () => {
@@ -37,7 +36,6 @@ const usePersistedState = (storageKey, defaultValue, suggestedValue) => {
 
   return [value, setValue];
 };
-
 
 
 export const Index = () => {
@@ -86,7 +84,7 @@ export const Index = () => {
       }).catch((err) => {
         // since the spec string has failed, console log the string and clear it.
         console.log(`storedMySpecStr [${storedMySpecStr}] will be cleared.`);
-        setStoredMySpecStr("");  
+        setStoredMySpecStr("");
         console.log(err);
     });
   }
@@ -118,13 +116,14 @@ export const Index = () => {
     } else {
       getObjects(strSpec, signal)
         .then((data) => {
-          if (data) {
+          if (data && data.total > 0) {
             setMyBrows(data.objectIDs);
           } else {
             setMyBrows([]);
           }
           setIsLoading(false);
-        });
+        })
+        .catch(() => {setMyBrows([]);});
     }
     setBrPageNum(1);
   }
