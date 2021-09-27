@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from 'react'
+
 
 import { PAGESIZE } from "./const";
 import { CollItem } from "./components/coll-item"
@@ -10,11 +11,6 @@ export const BrowPage = ( {storedMyDescStr, myBrows, pageCnt , myColl, setMyColl
 
   const [isLoading, setIsLoading] = useState(false);
   const [goPage, setGoPage] = useState(pageNum);
-
-  useEffect(() => {
-    console.log('switch to /browse');
-    setNavCurr("/browse");
-  }, []);
 
   useEffect(() => {
     setGoPage(pageNum);
@@ -42,6 +38,8 @@ export const BrowPage = ( {storedMyDescStr, myBrows, pageCnt , myColl, setMyColl
       setMyColl(myColl.filter(obj => obj!==Number(objid)));
       setIsLoading(false);
 }
+
+  setNavCurr("/browse");
 
   return (
     <div>
