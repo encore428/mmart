@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react"
 import ReactDOM from 'react-dom';
 
 import { BrowserRouter, Route } from "react-router-dom";
@@ -52,6 +52,7 @@ export const Index = () => {
   
   const [clPageNum, setClPageNum] = useState(1);
   const [clPageCnt, setClPageCnt] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setClPageNum(Math.min(clPageNum,clPageCnt));
@@ -73,9 +74,23 @@ export const Index = () => {
 
   ////////////////////////////////////
   // states for my browsing page
-  const getObjects = (spec) => {
-    return fetch(`${Const.BASE_URL}search?${spec}`).then((res) => res.json()).catch((e) => e);
+  const getObjects = (spec, signal) => {
+    return fetch(`${Const.BASE_URL}search?${spec}`, {
+        method: "GET",
+        signal
+    }).then((res) => {
+        if (!res.ok) {
+          throw new Error(res.statusText);
+        }
+        return res.json();
+      }).catch((err) => {
+        // since the spec string has failed, console log the string and clear it.
+        console.log(`storedMySpecStr [${storedMySpecStr}] will be cleared.`);
+        setStoredMySpecStr("");  
+        console.log(err);
+    });
   }
+
 
   //const [isLoading, setIsLoading] = useState(false);
   const [brPageNum, setBrPageNum] = useState(1);
@@ -94,16 +109,34 @@ export const Index = () => {
     //setIsLoading(false);
   }, [myBrows]);
 
+
+  const loadObjects = (strSpec, signal) => {
+    setIsLoading(true);
+    console.log(`strSpec is ${strSpec}`);
+    if (strSpec==="") {
+      setMyBrows([]);
+    } else {
+      getObjects(strSpec, signal)
+        .then((data) => {
+          if (data) {
+            setMyBrows(data.objectIDs);
+          } else {
+            setMyBrows([]);
+          }
+          setIsLoading(false);
+        });
+    }
+    setBrPageNum(1);
+  }
+
   useEffect(() => {
     // setIsLoading(true);
-    getObjects(storedMySpecStr)
-      .then((res) => {  if (res.objectIDs===undefined || res.objectIDs===null) {
-                            setMyBrows([]);
-                        } else {
-                            setMyBrows(res.objectIDs);
-                        }
-                        setBrPageNum(1);
-                      });
+    const ab = new AbortController();
+    loadObjects(storedMySpecStr, ab.signal);
+    return () => {
+      ab.abort();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storedMySpecStr]);
 
 
@@ -114,6 +147,7 @@ export const Index = () => {
           <BrowPage storedMyDescStr={storedMyDescStr} myBrows={myBrows} pageCnt={brPageCnt} 
                     myColl={myColl} setMyColl={setMyColl} 
                     pageNum={brPageNum} setPageNum={setBrPageNum}
+                    isLoading={isLoading} setIsLoading={setIsLoading}
           />
         </Route>
         <Route path="/spec">

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 
 import { BASE_URL } from "./const";
@@ -14,12 +14,25 @@ export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr,
 
   const history = useHistory();
   
-  const getDepts = () => {
-    return fetch(`${BASE_URL}departments`).then((res) => res.json());
-  }
+  const getDepts = () =>
+    fetch(`${BASE_URL}departments`).then((res) => res.json());
 
   useEffect(() => {
-      getDepts().then((res) => {setDepts(res.departments);});
+    console.log(`switched to ${navCurr}`);
+  }, [navCurr]);
+
+
+  useEffect(() => {
+      setNavCurr("/spec");
+      getDepts()
+          .then((res) => {
+              if (res) {
+                setDepts(res.departments);
+              } else {
+                setDepts([]);
+              }
+            });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [depts, setDepts] = useState([]);
@@ -27,29 +40,26 @@ export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr,
   const queryAPI = () => {
     let result1 = ""; let result2 = "";
     if (storedDept!==0) {
+      if (depts===undefined || depts===null || depts.filter(dept => dept.departmentId===storedDept)[0]===undefined) {
+        setStoredDept(0);
+      } else {
         result1 = result1 + "departmentIds=" + storedDept + "&";
         result2 = result2 + depts.filter(dept => dept.departmentId===storedDept)[0].displayName + " department, ";
+      }
     }
     if (storedHlgt) {
       result1 = result1 + "isHighlight=true&";
       result2 = result2 + "only high-lighted, ";
     }
-    if (storedAtst && storedKeyw!=="") {
+    if (storedAtst) {
       result1 = result1 + "artistOrCulture=true&";
       result2 = result2 + "artist or Culture with ";
     }
-    if (storedKeyw!=="") {
-      result1 = result1 + "q=" + storedKeyw + "&";
-      result2 = result2 + `keyword '${storedKeyw}', `;
-    }
-    if (result1 !== "") {
-      result1 = result1.slice(0,-1);
-      result2 = result2.slice(0,-2);
-    }
+    result1 = result1 + "q=" + storedKeyw;
+    result2 = result2 + `keyword '${storedKeyw}'`;
     return ["hasImages=true&"+result1, result2];
   }
 
-  setNavCurr("/spec");
   return (
       <div>
         <div className="flex-initial bg-white w-full lg:max-w-md border-b border-gray-100">
@@ -102,7 +112,7 @@ export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr,
                 <label htmlFor="keyword" className="block text-sm font-medium text-gray-900">
                   Keyword
                 </label>
-                <input type="text" id="keyword" className="
+                <input type="text" id="keyword" required className="
                     block
                     w-full
                     shadow-sm
@@ -112,7 +122,7 @@ export const SpecForm = ( {setStoredMySpecStr, setStoredMyDescStr,
                     rounded-md
                   "
                   value={storedKeyw}
-                  onChange={(ev) => {setStoredKeyw(ev.target.value);}} />
+                  onChange={(ev) => {setStoredKeyw(ev.target.value.trim());}} />
               </div>
             </div>
 

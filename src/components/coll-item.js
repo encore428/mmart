@@ -7,13 +7,30 @@ export const CollItem = ({objId, goDele, goPick}) => {
 
     const [data, setData] = React.useState(null);
 
-    const getObject = (objid) => {
-        return fetch(`${BASE_URL}objects/${objid}`).then((res) => res.json());
+    const getObject = (objid) => 
+         fetch(`${BASE_URL}objects/${objid}`).then((res) => res.json());
+
+    const loadObject = (objid, signal) => {
+        // setIsLoading(true);
+        getObject(objid, signal)
+            .then((res) => {
+                if (res) {
+                    setData(res);
+                } else {
+                    setData(null);
+                }
+                // setIsLoading(false);
+            })
     }
 
     React.useEffect(() => {
-        getObject(objId).then((res) => setData(res));
-    }, [objId]);
+        const ab = new AbortController();
+        loadObject(objId, ab.signal);
+        return () => {
+            ab.abort();
+        };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [objId]);
 
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
@@ -25,7 +42,7 @@ export const CollItem = ({objId, goDele, goPick}) => {
               <Link to={`/art/${objId}`}>
                 {data ? 
                 <img src={data.primaryImageSmall} alt="art small" />
-                : ''}
+                : `Unable to load details of artwork ${objId}`}
                 </Link>
               </div>
             </div>
