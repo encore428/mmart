@@ -46,6 +46,10 @@ The app has been deployed to Netlify as below:
 
 https://confident-thompson-470905.netlify.app/
 
+and StyleGuidist to:
+
+https://silly-pike-766f6d.netlify.app/
+
 
 During the deployment, there were two additional tasks required just because of Netlify:
 
