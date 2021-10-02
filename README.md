@@ -32,7 +32,7 @@ Create a new Single Page Application using Create React App with the following p
 
 1. Home page at path `/`, displays pages of personal artwork collection.  Artwork can be individually discarded.
 
-2. Specify filtering criteria on Specificaitons page at path `/spec`.  The specification is used to compose API to 
+2. Specify filtering criteria on Specifications page at path `/spec`.  The specification is used to compose API to 
    retrieve artwork from [Metropolitan Museum of Art](https://metmuseum.github.io/).
 
 3. Browse filtered collection of artworks in pages at path `/browse`.  Artwork can be selectively added to personal collection.
@@ -55,5 +55,5 @@ During the deployment, there were two additional tasks required just because of 
 this [article](https://ridbay.medium.com/react-routing-and-netlify-redirects-fd1f00eeee95).
 
 
-# Testing
+
 
