@@ -84,7 +84,9 @@ export const Index = () => {
       }).catch((err) => {
         // since the spec string has failed, console log the string and clear it.
         console.log(`storedMySpecStr [${storedMySpecStr}] will be cleared.`);
+        window.alert(`Your specification string [${storedMySpecStr}] has encountered error.  The string is cleared.  Please proceed to Specifications page to prepare a new one. `)
         setStoredMySpecStr("");
+        setStoredMyDescStr("");
         console.log(err);
     });
   }

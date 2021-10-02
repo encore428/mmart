@@ -33,8 +33,13 @@ export const ObjtPage = () => {
       {data ? 
       <>
          <img src={data.primaryImage} alt="primary" />
-         <p>Title: {data.title}</p>
-         <p>Artist: {data.artistDisplayName}, {data.artistDisplayBio}</p>
+         <p><b>Title:</b> {data.title}</p>
+         {data.artistDisplayName!==""||data.artistDisplayBio!==""? (
+           <p><b>Artist:</b> {data.artistDisplayName}{data.artistDisplayName!==""&&data.artistDisplayBio!==""?",":""} {data.artistDisplayBio}</p>
+         ):""}
+         <p><b>Medium</b> {data.medium}</p>
+         <p><b>Object Date:</b> {data.objectDate}</p>
+         <p><b>Credit Line:</b> {data.creditLine}</p>
          </>
          : '<p>Unable to load artwork data</p>'
       }

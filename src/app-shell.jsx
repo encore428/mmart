@@ -19,15 +19,17 @@ export const AppShell = ({ children }) => {
     <NavContext.Provider value = {value}>
       <div>
         <h1>My Metropolitan Museum of Art Collection</h1>
+        <div>
           <ul className="header">
             <li><Link to="/" className={navCurr==="/"?"active":""} >My collection</Link></li>
             <li><Link to="/spec" className={navCurr==="/spec"?"active":""} >Specifications</Link></li>
             <li><Link to="/browse" className={navCurr==="/browse"?"active":""} >Browse</Link></li>
           </ul>
-          <div className="content">
-            {children}
-          </div>
         </div>
+        <div className="content">
+          {children}
+        </div>
+      </div>
     </NavContext.Provider>
   );
 };

@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react"
 
 import { PAGESIZE } from "./const";
+import { Button } from "./components/button";
+import { NumberControl } from "./components/number-control";
 import { CollItem } from "./components/coll-item"
 import NavContext from './navContext';
 
@@ -12,6 +14,7 @@ export const BrowPage = ( {storedMyDescStr, myBrows, pageCnt ,
   const { navCurr, setNavCurr } = useContext(NavContext);
 
   const [goPage, setGoPage] = useState(pageNum);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     console.log(`switched to ${navCurr}`);
@@ -52,95 +55,53 @@ export const BrowPage = ( {storedMyDescStr, myBrows, pageCnt ,
   return (
     <div>
         <div id="pagination-btns" className="flex justify-between items-center">
-            <button id="prev-btn" type="button"
-                disabled={isLoading || pageNum<=1} 
-                onClick={() => {pageMvnt('P', -1);}}
-                    className={`
-                    inline-flex justify-center
-                    px-4 py-2
-                    border border-transparent
-                    shadow-sm rounded-md
-                    text-xs text-white
-                    bg-pink-600
-                    hover:bg-pink-700
-                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500
-                    `}>
+            <Button
+                type="button"
+                variant="primary"
+                    disabled={isLoading || pageNum<=1} 
+                    onClick={() => {pageMvnt('P', -1);}}
+              >
                 {isLoading?"Loading...":"Previous"}
-            </button>
+            </Button>
+
             <form id="goform" className="flex justify-between items-center">
-                <label htmlFor="gopage">Page#</label>
-                <input type="number" id="gopage" required 
-                    className="
-                        block
-                        w-full
-                        shadow-sm
-                        sm:text-sm
-                        focus:ring-pink-500 focus:border-pink-500
-                        border-gray-300
-                        rounded-md
-                    "
-                  value={goPage}
-                  onChange={(ev) => {setGoPage(Number(ev.target.value)<1?1:(Number(ev.target.value)>pageCnt?pageCnt:Number(ev.target.value)));}} />
-                <button id="btngopage" type="button" disabled={isLoading}
-                    onClick={() => {pageMvnt('G', Number(goPage));}}
-                    className="
-                        inline-flex justify-center
-                        px-4 py-2
-                        border border-transparent
-                        shadow-sm rounded-md
-                        text-xs text-white
-                        bg-pink-600
-                        hover:bg-pink-700
-                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500
-                        ">
-                    Go
-                </button>
+                <NumberControl value={goPage} setValue={setGoPage} 
+                               error={error} setError={setError}
+                               maxNum={pageCnt} 
+                />
+                <Button
+                    type="button"
+                    variant="primary"
+                    disabled={isLoading} 
+                    onClick={() => {setError("");pageMvnt('G', Number(goPage));}}
+                >
+                      {isLoading?'Loading...':(`Go to page ${goPage}`)}
+                </Button>
             </form>            
-            <button id="page-num" type="button"
+            <Button
+                type="button"
+                variant="outline"
                 disabled={isLoading} 
                 onClick={() => {pageMvnt('P', 0);}}
-                className="
-                inline-flex justify-center
-                    px-4 py-2
-                    border border-transparent
-                    shadow-sm rounded-md
-                    text-xs text-white
-                    bg-pink-600
-                    hover:bg-pink-700
-                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500
-                    ">
+              >
                 {isLoading?'Loading...':(`Page ${pageNum} of ${pageCnt}`)}
-            </button>
-            <button id="rand-btn" type="button" 
+            </Button>
+            <Button
+                type="button"
+                variant="primary"
                 disabled={isLoading || pageCnt===1} 
                 onClick={() => {pageMvnt('R');}}
-                className="
-                inline-flex justify-center
-                    px-4 py-2
-                    border border-transparent
-                    shadow-sm rounded-md
-                    text-xs font-medium text-white
-                    bg-pink-600
-                    hover:bg-pink-700
-                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500
-                    ">
+              >
                 {isLoading?"Loading...":"Random"}
-            </button>
-            <button id="next-btn" type="button" 
+            </Button>
+            <Button
+                type="button"
+                variant="primary"
                 disabled={isLoading || pageNum>=pageCnt} 
                 onClick={() => {pageMvnt('P', 1);}}
-                className="
-                inline-flex justify-center
-                    px-4 py-2
-                    border border-transparent
-                    shadow-sm rounded-md
-                    text-xs font-medium text-white
-                    bg-pink-600
-                    hover:bg-pink-700
-                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500
-                    ">
+              >
                 {isLoading?"Loading...":"Next"}
-            </button>
+            </Button>
         </div>
 
         <div className="max-w-xm flex py-6 space-y-1">
